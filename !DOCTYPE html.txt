@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application de Saisie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: white;
+            color: black;
+            background-image: url('https://i.ibb.co/nrd56vP/eurovia-logotype-digital-couleurs.jpg');
+            background-size: 90%;
+            background-repeat: no-repeat;
+            background-position: top;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            position: absolute;
+            top: 20px;
+            width: 100%;
+        }
+
+        .header h2 {
+            color: #002d72; /* Bleu Eurovia */
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .address {
+            color: #002d72;
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #002d72;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #e1c300;
+        }
+
+        .back-button {
+            background-color: transparent;
+            color: #002d72;
+            border: 1px solid #002d72;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        .home-button {
+            background-color: transparent;
+            color: #002d72;
+            border: 1px solid #002d72;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        #recycledMessage, #confirmation {
+            display: none;
+            margin-top: 10px;
+        }
+
+        #recycledMessage {
+            color: red;
+        }
+
+        #confirmation {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="https://i.ibb.co/nrd56vP/eurovia-logotype-digital-couleurs.jpg" alt="Logo Eurovia" style="width: 90%;">
+    <h2>Usine de Carignan</h2>
+    <div class="address">100 Chem. de la carrière, Carignan, QC J3L 0N5</div>
+</div>
+
+<div class="container" id="infoContainer">
+    <h1>Indiquer vos Informations</h1>
+    <form id="infoForm">
+        <label for="companyName">Nom de l'entreprise :</label>
+        <input type="text" id="companyName" required>
+        
+        <label for="licensePlate">Immatriculation :</label>
+        <input type="text" id="licensePlate" required>
+        
+        <button type="submit">Soumettre</button>
+    </form>
+    <div id="result" style="margin-top: 20px;"></div>
+</div>
+
+<div class="container" id="asphaltContainer">
+    <h1>Choisir le Type d'Asphalte</h1>
+    <form id="asphaltForm">
+        <label for="asphaltType">Sélectionnez un type d'asphalte :</label>
+        <select id="asphaltType" required>
+            <option value="">--Sélectionnez--</option>
+            <option value="EB5">EB5</option>
+            <option value="EB10C">EB10C</option>
+            <option value="ESG10">ESG10</option>
+        </select>
+
+        <label for="tonnage">Tonnage (en tonnes) :</label>
+        <input type="number" id="tonnage" required min="1">
+
+        <fieldset>
+            <legend>Souhaitez-vous de l'asphalte recyclé ?</legend>
+            <label><input type="radio" name="recycled" value="oui" required> Oui</label>
+            <label><input type="radio" name="recycled" value="non"> Non</label>
+        </fieldset>
+
+        <div id="recycledOptions" style="display: none;">
+            <label for="recycledPercentage">Pourcentage recyclé :</label>
+            <select id="recycledPercentage">
+                <option value="">--Sélectionnez--</option>
+                <option value="R10">10%</option>
+                <option value="R20">20%</option>
+                <option value="R30">30%</option>
+            </select>
+            <button type="button" id="validateRecycled">Valider</button>
+            <div id="recycledMessage">Veuillez noter que l'asphalte recyclé nécessite un minimum de 100 tonnes.</div>
+        </div>
+        
+        <button type="submit">Soumettre</button>
+    </form>
+    <div id="asphaltResult" style="margin-top: 20px;"></div>
+</div>
+
+<div class="container" id="bitumenContainer">
+    <h1>Choisir le Type de Bitume</h1>
+    <form id="bitumenForm">
+        <label for="bitumenType">Sélectionnez un type de bitume :</label>
+        <select id="bitumenType" required>
+            <option value="">--Sélectionnez--</option>
+            <option value="58S-28">58S-28</option>
+            <option value="64E-28">64E-28</option>
+            <option value="64E-28 THRD">64E-28 THRD</option>
+        </select>
+        
+        <button type="submit">Soumettre</button>
+    </form>
+    <div id="bitumenResult" style="margin-top: 20px;"></div>
+</div>
+
+<div class="container" id="collectContainer">
+    <h1>Choix de Collecte</h1>
+    <form id="collectForm">
+        <label for="pickupDate">Date de collecte :</label>
+        <input type="date" id="pickupDate" required>
+
+        <label for="pickupTime">Plage horaire :</label>
+        <select id="pickupTime" required>
+            <option value="">--Sélectionnez--</option>
+            <option value="6h-12h">6h à 12h</option>
+            <option value="12h30-17h">12h30 à 17h</option>
+        </select>
+        
+        <button type="submit">Soumettre</button>
+    </form>
+    <div id="collectResult" style="margin-top: 20px;"></div>
+    <div id="confirmation">✔️ Commande validée avec succès!</div>
+</div>
+
+<button class="back-button" onclick="goBack()">← Retour</button>
+<button class="home-button" onclick="goHome()">🏠 Accueil</button>
+
+<script>
+    let currentContainer = 'infoContainer';
+    let totalTonnage;
+
+    document.getElementById(currentContainer).style.display = 'block';
+
+    document.getElementById('infoForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const companyName = document.getElementById('companyName').value;
+        const licensePlate = document.getElementById('licensePlate').value;
+
+        document.getElementById('result').innerHTML = 
+            `<h2>Informations soumises :</h2>
+            <p>Nom de l'entreprise : ${companyName}</p>
+            <p>Plaque d'immatriculation : ${licensePlate}</p>`;
+
+        toggleContainers('asphaltContainer');
+    });
+
+    document.getElementById('asphaltForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const asphaltType = document.getElementById('asphaltType').value;
+        totalTonnage = document.getElementById('tonnage').value;
+        const recycled = document.querySelector('input[name="recycled"]:checked').value;
+        const recycledPercentage = recycled === "oui" ? document.getElementById('recycledPercentage').value : 'Aucun';
+
+        document.getElementById('asphaltResult').innerHTML = 
+            `<h2>Type d'asphalt sélectionné : ${asphaltType}</h2>
+            <p>Tonnage : ${totalTonnage} tonnes</p>
+            <p>Asphalte recyclé : ${recycled}</p>
+            <p>Pourcentage recyclé : ${recycledPercentage}</p>`;
+
+        toggleContainers('bitumenContainer');
+    });
+
+    document.querySelectorAll('input[name="recycled"]').forEach(function(input) {
+        input.addEventListener('change', function() {
+            document.getElementById('recycledOptions').style.display = input.value === 'oui' ? 'block' : 'none';
+            document.getElementById('recycledMessage').style.display = 'none';
+        });
+    });
+
+    document.getElementById('validateRecycled').addEventListener('click', function() {
+        const recycledPercentage = document.getElementById('recycledPercentage').value;
+        if (recycledPercentage) {
+            document.getElementById('recycledMessage').style.display = 'block';
+        } else {
+            alert('Veuillez sélectionner un pourcentage recyclé.');
+        }
+    });
+
+    document.getElementById('bitumenForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const bitumenType = document.getElementById('bitumenType').value;
+
+        document.getElementById('bitumenResult').innerHTML = 
+            `<h2>Type de bitume sélectionné : ${bitumenType}</h2>`;
+
+        toggleContainers('collectContainer');
+    });
+
+    document.getElementById('collectForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const pickupDate = document.getElementById('pickupDate').value;
+        const pickupTime = document.getElementById('pickupTime').value;
+
+        document.getElementById('collectResult').innerHTML = 
+            `<h2>Informations de Collecte :</h2>
+            <p>Date de collecte : ${pickupDate}</p>
+            <p>Plage horaire : ${pickupTime}</p>
+            <p>Tonnage : ${totalTonnage} tonnes</p>`;
+
+        document.getElementById('confirmation').style.display = 'block';
+    });
+
+    function toggleContainers(containerId) {
+        document.querySelectorAll('.container').forEach(container => {
+            container.style.display = 'none';
+        });
+        document.getElementById(containerId).style.display = 'block';
+        currentContainer = containerId;
+    }
+
+    function goBack() {
+        const previousContainers = {
+            'asphaltContainer': 'infoContainer',
+            'bitumenContainer': 'asphaltContainer',
+            'collectContainer': 'bitumenContainer'
+        };
+
+        if (previousContainers[currentContainer]) {
+            toggleContainers(previousContainers[currentContainer]);
+        }
+    }
+
+    function goHome() {
+        toggleContainers('infoContainer');
+        document.getElementById('result').innerHTML = '';
+        document.getElementById('collectResult').innerHTML = '';
+        document.getElementById('confirmation').style.display = 'none';
+        document.getElementById('asphaltResult').innerHTML = '';
+        document.getElementById('bitumenResult').innerHTML = '';
+        totalTonnage = null;
+    }
+</script>
+
+</body>
+</html>
